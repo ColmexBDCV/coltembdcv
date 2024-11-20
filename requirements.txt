@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+requests
+httpx
+sqlalchemy
+pydantic-settings
+bcrypt
+alembic
