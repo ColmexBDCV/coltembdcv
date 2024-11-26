@@ -80,9 +80,10 @@ def search_data(site_id: int, payload: dict, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail=f"Error fetching data from repository: {str(e)}")
 
     # Aplica la lógica de filtrado a los datos obtenidos
-    field_filters = db.query(FieldFilter).filter(FieldFilter.site_id == site_id).all()
-    facet_filters = db.query(FacetFilter).filter(FacetFilter.site_id == site_id).all()
-    article_filters = db.query(ArticleFilter).filter(ArticleFilter.site_id == site_id).all()
+    field_filters = db.query(FieldFilter).filter(FieldFilter.site_id == site_id,  FieldFilter.active == True).all()
+    facet_filters = db.query(FacetFilter).filter(FacetFilter.site_id == site_id,  FacetFilter.active == True).all()
+    article_filters = db.query(ArticleFilter).filter(ArticleFilter.site_id == site_id,
+                                                                                ArticleFilter.active == True).all()
 
     filtered_data = filter_data(data, field_filters, facet_filters, article_filters)
 

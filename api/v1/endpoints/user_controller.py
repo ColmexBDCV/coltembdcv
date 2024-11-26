@@ -19,7 +19,7 @@ def register_user(auth_data: UserAuthCreate, info_data: UserInfoCreate, db: Sess
 # Iniciar sesión (autenticación de usuario)
 @router.post("/login/", summary="Logueo de usuario (En construccion)", description="Hay que implementar JWT para que funcione")
 def login_user(username: str, password: str, db: Session = Depends(get_db)):
-    user = authenticate_user(db, username, password)
-    if not user:
+    token = authenticate_user(db, username, password)
+    if not token:
         raise HTTPException(status_code=400, detail="Invalid username or password")
-    return {"message": "Login successful", "user_id": user.id}
+    return {"message": "Login successful", "token": token}

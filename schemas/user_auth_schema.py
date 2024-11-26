@@ -11,3 +11,6 @@ class UserAuthOut(UserAuthBase):
 
     class Config:
         from_attributes = True
+
+class UserAuth(UserAuthOut):
+    pass

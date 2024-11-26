@@ -1,3 +1,7 @@
+from sqlalchemy.orm import joinedload
+from collections import defaultdict
+from models.metadatasite_model import MetadataSite
+
 def remove_solr_sufix(key):
     key = key.replace("_tesim", "")
     key = key.replace("_ssim", "")
@@ -43,27 +47,56 @@ def filter_data(data, field_filters, facet_filters, article_filters):
 
     return data
 
+def filter_article_data(data, article_filters, db_session):
+    from sqlalchemy.orm.exc import NoResultFound
+    from sqlalchemy.exc import SQLAlchemyError
+    from collections import defaultdict
 
-def filter_article_data(data, article_filters):
-    # Configurar filtros de `article_filter`
     article_filter_keys = {remove_solr_sufix(f.filter_key) for f in article_filters}
     iterable_article_filter_keys = {remove_solr_sufix(f.filter_key) for f in article_filters if f.iterable}
 
-    # Iterar sobre la clave principal de `data` para aplicar los filtros
     filtered_data = {}
-    iterables = {}
+    iterables = defaultdict(list)
 
-    for key, value in data.items():
-        new_key = remove_solr_sufix(key)
-        # Filtrar si `new_key` está en `article_filter_keys`
-        if new_key in article_filter_keys and value not in [None, "", [], {}]:
-            if new_key in iterable_article_filter_keys:
-                iterables[new_key] = value  # Filtrar en `iterables` si es iterable
-            else:
-                filtered_data[new_key] = value  # Filtrar en `filtered_data` si no es iterable
+    try:
+        for key, value in data.items():
+            new_key = remove_solr_sufix(key)
 
-    # Incluir `iterables` en `filtered_data` si tiene contenido
-    if iterables:
-        filtered_data['iterables'] = iterables
+            if new_key in article_filter_keys and value not in [None, "", [], {}]:
+                if new_key in iterable_article_filter_keys:
+                    iterables[new_key] = value
+                else:
+                    filtered_data[new_key] = value
 
-    return filtered_data
+            if key == "id" and isinstance(value, dict) and "id" in value:
+                id_registro = value["id"]
+
+                if not id_registro:
+                    continue
+
+                try:
+                    related_metadata = (
+                        db_session.query(MetadataSite)
+                        .options(joinedload(MetadataSite.metadatas))
+                        .filter(MetadataSite.id_registro == id_registro)
+                        .all()
+                    )
+
+                    for metadata in related_metadata:
+                        iterables[metadata.metadatas.nombre].append(metadata.valor)
+
+                except NoResultFound:
+                    print(f"No se encontraron datos para id_registro: {id_registro}")
+                except SQLAlchemyError as e:
+                    print(f"Error de SQLAlchemy: {e}")
+
+        if iterables:
+            filtered_data["iterables"] = dict(iterables)
+
+        return filtered_data
+
+    except Exception as e:
+        print(f"Error al filtrar los datos: {e}")
+        raise
+
+

@@ -12,3 +12,5 @@ from .document_type_model import DocumentType
 from .map_model import Map
 from .map_filter_model import MapFilter
 from .default_map_filter_model import DefaultMapFilter
+from .metadata_model import Metadata
+from .metadatasite_model import MetadataSite

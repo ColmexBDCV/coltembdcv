@@ -28,3 +28,4 @@ class Site(Base):
     article_filters = relationship("ArticleFilter", back_populates="site")
     maps = relationship("Map", back_populates="site")
     map_filters = relationship("MapFilter", back_populates="site")
+    metadata_sites = relationship("MetadataSite", back_populates="site")

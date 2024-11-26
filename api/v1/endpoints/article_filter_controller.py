@@ -8,12 +8,12 @@ from db.session import get_db
 router = APIRouter()
 
 # Crear un nuevo filtro de artículos
-@router.post("/sites/{site_id}/article_filters/", response_model=ArticleFilterOut)
+@router.post("/{site_id}/article_filters/", response_model=ArticleFilterOut)
 def add_article_filter(site_id: int, filter_data: ArticleFilterCreate, user_id: int, db: Session = Depends(get_db)):
     return create_article_filter(db, site_id, filter_data, user_id)
 
 # Activar/Desactivar un filtro de artículos
-@router.put("/article_filters/{filter_id}/toggle/", response_model=ArticleFilterOut)
+@router.put("/{filter_id}/toggle/", response_model=ArticleFilterOut)
 def toggle_article_filter(filter_id: int, user_id: int, db: Session = Depends(get_db)):
     try:
         return toggle_article_filter_status(db, filter_id, user_id)
@@ -21,7 +21,7 @@ def toggle_article_filter(filter_id: int, user_id: int, db: Session = Depends(ge
         raise HTTPException(status_code=400, detail=str(e))
 
 # Obtener todos los filtros de artículos para un sitio
-@router.get("/sites/{site_id}/article_filters/", response_model=list[ArticleFilterOut])
+@router.get("/{site_id}/article_filters/", response_model=list[ArticleFilterOut])
 def list_article_filters(site_id: int, db: Session = Depends(get_db)):
     return get_article_filters_for_site(db, site_id)
 

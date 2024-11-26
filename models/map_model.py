@@ -18,4 +18,4 @@ class Map(Base):
     user_id = Column(Integer, ForeignKey('user_auth.id'), nullable=False)
 
     site = relationship("Site", back_populates="maps")
-    user = relationship("UserAuth")
+    user = relationship("UserAuth", back_populates="maps")

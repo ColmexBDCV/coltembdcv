@@ -28,7 +28,9 @@ def get_document_data_service(db: Session, site_id: int, document_data: dict):
     # Lógica adicional de filtrado
     filtered_data = filter_article_data(
         response_data,
-        article_filters=db.query(ArticleFilter).all()
+        article_filters=db.query(ArticleFilter).filter(ArticleFilter.site_id == site_id,
+                                                                                ArticleFilter.active == True).all(),
+        db_session=db
     )
 
     return {"site": site, "data": filtered_data}

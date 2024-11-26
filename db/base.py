@@ -17,3 +17,5 @@ from models.document_type_model import DocumentType
 from models.map_model import Map
 from models.map_filter_model import MapFilter
 from models.default_map_filter_model import DefaultMapFilter
+from models.metadata_model import Metadata
+from models.metadatasite_model import MetadataSite
