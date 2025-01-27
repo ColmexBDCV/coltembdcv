@@ -5,7 +5,9 @@ from api.router import api_router
 from core.config import settings
 from db.base import Base
 from db.session import engine
+from core.logging_config import setup_logging
 
+setup_logging()
 app = FastAPI(title="Colecciones Tematicas")
 
 # Configurar los orígenes permitidos (dominios que pueden hacer peticiones al backend)

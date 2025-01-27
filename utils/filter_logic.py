@@ -1,6 +1,9 @@
 from sqlalchemy.orm import joinedload
 from collections import defaultdict
 from models.metadatasite_model import MetadataSite
+import logging
+
+logger = logging.getLogger(__name__)
 
 def remove_solr_sufix(key):
     key = key.replace("_tesim", "")
@@ -57,7 +60,7 @@ def filter_article_data(data, article_filters, db_session):
 
     filtered_data = {}
     iterables = defaultdict(list)
-
+    logger.debug("Method: filter_article_data")
     try:
         for key, value in data.items():
             new_key = remove_solr_sufix(key)

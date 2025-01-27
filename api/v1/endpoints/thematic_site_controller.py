@@ -9,6 +9,9 @@ from schemas.modal_facet_schema import ModalFacetRequest
 from services.map_service import build_url_with_filters
 from services.thematic_service import get_document_data_service, build_facet_url, fetch_facet_data, is_next_page
 from utils.filter_logic import filter_data
+import logging
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -97,6 +100,7 @@ def get_document_data(
         db: Session = Depends(get_db)
 ):
     try:
+        logger.debug("/document-data")
         data = get_document_data_service(db, site_id, document_data.dict())
         return data
     except ValueError as e:

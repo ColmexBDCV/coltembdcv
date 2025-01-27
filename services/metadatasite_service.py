@@ -32,6 +32,7 @@ def update_metadata_site(db: Session, db_metadata_site: MetadataSite, metadata_s
 def delete_metadata_site(db: Session, metadata_site_id: int):
     db_metadata_site = db.query(MetadataSite).filter(MetadataSite.id == metadata_site_id).first()
     if db_metadata_site:
+        print("Eliminando metadato...%s", db_metadata_site)
         db.delete(db_metadata_site)
         db.commit()
-    return db_metadata_site
+    return {"detail": "Metadata deleted successfully"}

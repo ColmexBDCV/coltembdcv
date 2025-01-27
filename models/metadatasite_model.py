@@ -8,7 +8,7 @@ class MetadataSite(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     valor = Column(String, nullable=False)
-    id_metadato = Column(Integer, ForeignKey("metadata.id"), nullable=False)  # Relación con Metadatos
+    id_metadato = Column(Integer, ForeignKey("metadata.id"),nullable=False)  # Relación con Metadatos
     id_site = Column(Integer, ForeignKey("sites.id"), nullable=False)  # Relación con Site
     id_registro = Column(String, nullable=False)  # Campo string sin relación
     tipo = Column(String, nullable=False)

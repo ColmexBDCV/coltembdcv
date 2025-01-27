@@ -5,6 +5,9 @@ from models import FieldFilter, FacetFilter, ArticleFilter
 from models.site_model import Site
 from models.document_type_model import DocumentType
 from utils.filter_logic import filter_data, filter_article_data
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def get_document_data_service(db: Session, site_id: int, document_data: dict):
@@ -21,6 +24,7 @@ def get_document_data_service(db: Session, site_id: int, document_data: dict):
         raise ValueError("Document type not active or not found")
 
     full_url = f"{base_url}concern/{document_type.type}/{document_data['id']}.json"
+    logger.debug(f"Url document: {full_url}")
 
     response = requests.get(full_url)
     response_data = response.json()

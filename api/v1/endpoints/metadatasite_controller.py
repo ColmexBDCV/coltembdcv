@@ -38,7 +38,7 @@ def update_metadata_site_endpoint(
         raise HTTPException(status_code=404, detail="MetadataSite not found")
     return update_metadata_site(db, db_metadata_site, metadata_site_update)
 
-@router.delete("/{metadata_site_id}", response_model=MetadataSite)
+@router.delete("/{metadata_site_id}")
 def delete_metadata_site_endpoint(metadata_site_id: int, db: Session = Depends(get_db)):
     db_metadata_site = delete_metadata_site(db, metadata_site_id)
     if not db_metadata_site:
