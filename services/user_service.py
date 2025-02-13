@@ -42,6 +42,15 @@ def authenticate_user(db: Session, username: str, password: str):
         token = crear_token({"usuario_id": user.id})
     return token
 
+def existUser(db: Session, username: str, password: str):
+    user = db.query(UserAuth).filter(UserAuth.username == username).first()    
+    if not user or not verify_password(password, user.hashed_password):
+        return None
+    else:
+        user_info = db.query(UserInfo).filter(UserInfo.user_auth_id == user.id).first()
+        print("User Info: ", user_info)
+        return user_info
+
 # Generar un token
 def crear_token(data: dict):
     datos_a_firmar = data.copy()

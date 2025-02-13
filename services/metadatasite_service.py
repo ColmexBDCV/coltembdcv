@@ -10,6 +10,7 @@ def create_metadata_site(db: Session, metadata_site: MetadataSiteCreate):
     return db_metadata_site
 
 def get_metadata_sites(db: Session, id_site: int, id_registro: str, skip: int = 0, limit: int = 100):
+    print("ID REGISTRO: " + id_registro)
     return (
         db.query(MetadataSite)
         .options(joinedload(MetadataSite.metadatas))
